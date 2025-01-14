@@ -15,18 +15,18 @@ Set-Location -Path "01-functionapp"
 terraform init 
 terraform apply -auto-approve
 
-# Write-Host "NOTE: Zipping python code into functions.zip"
+Set-Location -Path ..
 
-# Remove-Item -Path "functions.zip" -Force -ErrorAction SilentlyContinue
-# Set-Location -Path "functions"
+Set-Location -Path "02-flasky"
 
-# wsl zip -r ../functions.zip . -x "*/.vscode/*" "*/__pycache__/*"
-# Set-Location -Path ..
+Write-Host "NOTE: Zipping python code into flasky.zip"
+Remove-Item -Path "flasky.zip" -Force -ErrorAction SilentlyContinue
+wsl zip -r ./flasky.zip . -x "/__pycache__/*" "/.vscode/*" "/local.settings.json"
 
-# Write-Host "NOTE: Publishing latest code using the AZ CLI"
+Write-Host "NOTE: Publishing latest code using the AZ CLI"
 
-#$FunctionAppName = az functionapp list --resource-group flasky-resource-group --query "[?starts_with(name, 'flasky-')].name" --output tsv
-#az functionapp deployment source config-zip --name $FunctionAppName --resource-group flasky-resource-group --src .\functions.zip  --build-remote true 
+$FunctionAppName = az functionapp list --resource-group flasky-resource-group --query "[?starts_with(name, 'flasky-')].name" --output tsv
+az functionapp deployment source config-zip --name $FunctionAppName --resource-group flasky-resource-group --src .\flasky.zip  --build-remote true 
 
 Set-Location -Path ..
 

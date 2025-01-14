@@ -6,6 +6,13 @@ resource "azurerm_service_plan" "flasky_asp" {
   sku_name            = "Y1" 
 }
 
+resource "azurerm_application_insights" "flasky_app_insights" {
+  name                = "flasky-ai-${substr(data.azurerm_client_config.current.subscription_id, 0, 8)}"
+  location            = azurerm_resource_group.flasky_resource_group.location
+  resource_group_name = azurerm_resource_group.flasky_resource_group.name
+  application_type    = "web"
+}
+
 resource "azurerm_linux_function_app" "flasky_function_app" {
   name                       = "flasky-app-${substr(data.azurerm_client_config.current.subscription_id, 0, 8)}"
   location                   = azurerm_resource_group.flasky_resource_group.location
@@ -34,6 +41,8 @@ resource "azurerm_linux_function_app" "flasky_function_app" {
     "FUNCTIONS_WORKER_RUNTIME"       = "python"
     "SCM_DO_BUILD_DURING_DEPLOYMENT" = "true"
     "PYTHON_VERSION"                 = "3.11"
+    "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.flasky_app_insights.instrumentation_key
+    "APPLICATIONINSIGHTS_CONNECTION_STRING" = azurerm_application_insights.flasky_app_insights.connection_string
   }
 
   https_only = true
