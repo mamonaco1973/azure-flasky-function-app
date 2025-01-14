@@ -4,3 +4,7 @@
 *.terraform.lock.hcl
 *.terraform.*
 *.pem
+*.zip
+.vscode/
+__pycache__/
+
