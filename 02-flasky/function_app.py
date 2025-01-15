@@ -29,7 +29,6 @@ container = database.get_container_client(CONTAINER_NAME)
 
 # Get hostname and IP address of the container running this Function App
 hostname = socket.gethostname()  # Retrieve the hostname of the current instance
-instance_id = socket.gethostbyname(hostname)  # Retrieve the IP address corresponding to the hostname
 
 # Create an Azure FunctionApp instance with anonymous HTTP access level
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
@@ -97,7 +96,7 @@ def gtg(req: HttpRequest) -> HttpResponse:
 
         if details:
             # If 'details' parameter exists, return instance connectivity and hostname details
-            data = {"connected": "true", "hostname": instance_id}
+            data = {"connected": "true", "hostname": hostname}
             return HttpResponse(json.dumps(data), status_code=200)
         else:
             # If no 'details' parameter, return a simple success response

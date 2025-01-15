@@ -12,8 +12,8 @@ Set-Location -Path "01-functionapp"
 
 # Write-Host "NOTE: Build and deploy the Function App"
 
-#terraform init 
-#terraform apply -auto-approve
+terraform init 
+terraform apply -auto-approve
 
 Set-Location -Path ..
 
