@@ -36,5 +36,5 @@ echo "NOTE: Testing the API Gateway Solution."
 echo "NOTE: URL for API Solution is $SERVICE_URL/gtg?details=true"
 
 # Execute the test script with the Service URL
-./01-functionapp/test_candidates.py "$SERVICE_URL
+./01-functionapp/test_candidates.py "$SERVICE_URL"
 
