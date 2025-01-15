@@ -30,5 +30,10 @@ az functionapp deployment source config-zip --name $FunctionAppName --resource-g
 
 Set-Location -Path ..
 
+# Validate the solution
+
+./validate.ps1
+
+
 
 
