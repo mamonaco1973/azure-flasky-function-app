@@ -43,6 +43,9 @@ resource "azurerm_linux_function_app" "flasky_function_app" {
     "PYTHON_VERSION"                 = "3.11"
     "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.flasky_app_insights.instrumentation_key
     "APPLICATIONINSIGHTS_CONNECTION_STRING" = azurerm_application_insights.flasky_app_insights.connection_string
+    "COSMOS_ENDPOINT"                = azurerm_cosmosdb_account.candidate_account.endpoint
+    "COSMOS_DATABASE_NAME"           = "CandidateDatabase"
+    "COSMOS_CONTAINER_NAME"          = "Candidates"
   }
 
   https_only = true
