@@ -35,3 +35,11 @@ az functionapp deployment source config-zip --name "$FunctionAppName" --resource
 
 # Navigate back to the parent directory
 cd ..
+
+echo "NOTE: Applying role for local debugging."
+./add_permissions.sh
+
+echo "NOTE: Validating the solution."
+./validate.sh
+
+
