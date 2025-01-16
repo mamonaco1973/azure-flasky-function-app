@@ -30,7 +30,7 @@ az functionapp deployment source config-zip --name $FunctionAppName --resource-g
 Set-Location -Path ..
 
 Write-Host "NOTE: Applying role for local debugging."
-./add_permissions.p1
+./add_permissions.ps1
 
 # Validate the solution
 
