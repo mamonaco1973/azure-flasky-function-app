@@ -28,6 +28,25 @@ if [[ -z "$SERVICE_URL" ]]; then
     exit 1
 fi
 
+functions=("candidates" "candidate_get" "candidate_post" "gtg")
+
+# Loop through each function and retrieve the keys
+for function in "${functions[@]}"; do
+    # Get the function keys as JSON
+    keys=$(az functionapp function keys list \
+        --resource-group "$RESOURCE_GROUP_NAME" \
+        --name "$FUNCTION_APP_NAME" \
+        --function-name "$function" \
+        --output json)
+
+    # Extract the default key using jq
+    defaultKey=$(echo "$keys" | jq -r '.default')
+
+    # Print the output in the desired format
+    echo "NOTE: Function key for $function is {$defaultKey}"
+done
+
+
 # Add "https://" prefix to construct the full service URL
 SERVICE_URL="https://$SERVICE_URL"
 
