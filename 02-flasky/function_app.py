@@ -28,7 +28,7 @@ database = cosmos_client.get_database_client(DATABASE_NAME)
 container = database.get_container_client(CONTAINER_NAME)
 
 # Get hostname and IP address of the container running this Function App
-hostname = socket.gethostname()  # Retrieve the hostname of the current instance
+hostname = os.popen('hostname -I').read().strip() 
 
 # Create an Azure FunctionApp instance with anonymous HTTP access level
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
@@ -50,7 +50,7 @@ def candidate_get(req: HttpRequest) -> HttpResponse:
             raise Exception
 
         # Return the candidate's data as a JSON response with a 200 status code
-        return HttpResponse(json.dumps(response), status_code=200)
+        return HttpResponse(json.dumps(response), status_code=200,mimetype="application/json")
     except Exception as e:
         # Handle any errors, returning a 404 status code and an error message
         return HttpResponse(f"ERROR: {name} NOT FOUND", status_code=404)
@@ -68,7 +68,7 @@ def candidate_post(req: HttpRequest) -> HttpResponse:
 
         # Prepare and return a JSON response with the candidate's data
         data = {"CandidateName": name}
-        return HttpResponse(json.dumps(data), status_code=200)
+        return HttpResponse(json.dumps(data), status_code=200,mimetype="application/json")
     except exceptions.CosmosHttpResponseError as ex:
         # Handle Cosmos DB-specific errors, returning a 500 status code and the error message
         return HttpResponse(f"Error: {ex}", status_code=500)
@@ -82,7 +82,7 @@ def candidates(req: HttpRequest) -> HttpResponse:
         response = list(container.query_items(query=query, enable_cross_partition_query=True))
 
         # Return the list of candidates as a JSON response with a 200 status code
-        return HttpResponse(json.dumps(response), status_code=200)
+        return HttpResponse(json.dumps(response), status_code=200, mimetype="application/json")
     except Exception as e:
         # Handle any errors, returning a 404 status code and the error message
         return HttpResponse(f"Error: {e}", status_code=404)
@@ -97,10 +97,10 @@ def gtg(req: HttpRequest) -> HttpResponse:
         if details:
             # If 'details' parameter exists, return instance connectivity and hostname details
             data = {"connected": "true", "hostname": hostname}
-            return HttpResponse(json.dumps(data), status_code=200)
+            return HttpResponse(json.dumps(data), status_code=200, mimetype="application/json")
         else:
             # If no 'details' parameter, return a simple success response
-            return HttpResponse("", status_code=200)
+            return HttpResponse("[]", status_code=200,mimetype="application/json")
     except Exception as e:
         # Handle any errors, returning a 500 status code and the error message
         return HttpResponse(f"Error: {e}", status_code=500)
