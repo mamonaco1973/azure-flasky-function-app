@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set the resource group name
-RESOURCE_GROUP_NAME="flasky-resource-group" # Replace with your resource group name
+RESOURCE_GROUP_NAME="flasky-resource-group"
 
 # Retrieve the function app name dynamically
 FUNCTION_APP_NAME=$(az functionapp list \
@@ -28,24 +28,14 @@ if [[ -z "$SERVICE_URL" ]]; then
     exit 1
 fi
 
-functions=("candidates" "candidate_get" "candidate_post" "gtg")
+# Get the master key of the Azure Function App
+MasterKey=$(az functionapp keys list \
+  --resource-group "$RESOURCE_GROUP_NAME" \
+  --name "$FUNCTION_APP_NAME" \
+  --query "masterKey" -o tsv)
 
-# Loop through each function and retrieve the keys
-for function in "${functions[@]}"; do
-    # Get the function keys as JSON
-    keys=$(az functionapp function keys list \
-        --resource-group "$RESOURCE_GROUP_NAME" \
-        --name "$FUNCTION_APP_NAME" \
-        --function-name "$function" \
-        --output json)
-
-    # Extract the default key using jq
-    defaultKey=$(echo "$keys" | jq -r '.default')
-
-    # Print the output in the desired format
-    echo "NOTE: Function key for $function is {$defaultKey}"
-done
-
+# Output the note with the key header
+echo "NOTE: Key header for functions is 'x-functions-key:$MasterKey'"
 
 # Add "https://" prefix to construct the full service URL
 SERVICE_URL="https://$SERVICE_URL"
