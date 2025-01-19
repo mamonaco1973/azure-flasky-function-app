@@ -13,22 +13,12 @@ if (-not $FunctionAppName) {
     exit 1
 }
 
-$functions = @("candidates", "candidate_get", "candidate_post", "gtg")
-# Loop through each function and retrieve the keys
-foreach ($function in $functions) {
-    # Get the function keys as JSON and convert to a PowerShell object
-    $keys = az functionapp function keys list `
-        --resource-group $ResourceGroupName `
-        --name $FunctionAppName `
-        --function-name $function `
-        --output json | ConvertFrom-Json
+$MasterKey = az functionapp keys list `
+  --resource-group $ResourceGroupName `
+  --name $FunctionAppName `
+  --query "masterKey" -o tsv
 
-    # Extract the default key (you can modify this to print other keys if needed)
-    $defaultKey = $keys.default
-
-    # Print the output in the desired format
-    Write-Output "NOTE: Function key for $function is {$defaultKey}"
-}
+Write-Host "NOTE: Key header for functions is 'x-functions-key:$MasterKey'"
 
 # Retrieve the service URL
 $SERVICE_URL = az functionapp show `
