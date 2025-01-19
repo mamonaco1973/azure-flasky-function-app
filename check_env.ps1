@@ -1,7 +1,7 @@
 Write-Host "NOTE: Validating that required commands are found in your PATH."  -ForegroundColor Green
 
 # List of required commands
-$commands = @("wsl","az", "packer", "terraform")
+$commands = @("az", "packer", "terraform")
 $all_found = $true
 
 foreach ($cmd in $commands) {
@@ -56,16 +56,3 @@ if (-not $?) {
 } else {
     Write-Host "NOTE: Successfully logged into Azure."  -ForegroundColor Green
 }
-
-wsl zip -h2 > $null
-
-$returnCode = $LASTEXITCODE
-
-# Check if the return code indicates failure
-if ($returnCode -ne 0) {
-    Write-Host "ERROR: 'wsl zip' failed with exit code $returnCode. Stopping the script." -ForegroundColor Red
-    exit $returnCode
-}
-
-
-Write-Host "NOTE: Validated WSL and that Linux version of zip is installed."  -ForegroundColor Green

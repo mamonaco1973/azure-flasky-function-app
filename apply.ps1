@@ -20,7 +20,15 @@ Set-Location -Path "02-flasky"
 
 Write-Host "NOTE: Zipping python code into flasky.zip"
 Remove-Item -Path "flasky.zip" -Force -ErrorAction SilentlyContinue
-wsl zip -r ./flasky.zip . -x "/__pycache__/*" "/.vscode/*" "/local.settings.json"
+#wsl zip -r ./flasky.zip . -x "/__pycache__/*" "/.vscode/*" "/local.settings.json"
+
+# Collect all files and folders to include, excluding the specified items
+$files = Get-ChildItem -Recurse | Where-Object {
+    $_.FullName -notmatch "(__pycache__|\.vscode|local.settings.json)"
+}
+
+# Compress the filtered files into flasky.zip
+$files | Compress-Archive -DestinationPath "flasky.zip" -Update
 
 Write-Host "NOTE: Publishing latest code using the AZ CLI"
 

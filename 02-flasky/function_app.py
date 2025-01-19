@@ -1,19 +1,23 @@
-import azure.functions as func  # Import Azure Functions library for creating function apps
+import azure.functions as func                         # Import Azure Functions library for creating function apps
 from azure.functions import HttpRequest, HttpResponse  # Import HttpRequest and HttpResponse for handling HTTP requests and responses
-from azure.cosmos import CosmosClient, exceptions  # Import Cosmos DB client and exceptions for database operations
-from azure.identity import DefaultAzureCredential  # Import DefaultAzureCredential for authentication with Azure resources
-from azure.identity import ClientSecretCredential  # Import ClientSecretCredential for authentication (alternative method)
+from azure.cosmos import CosmosClient, exceptions      # Import Cosmos DB client and exceptions for database operations
+from azure.identity import DefaultAzureCredential      # Import DefaultAzureCredential for authentication with Azure resources
+from azure.identity import ClientSecretCredential      # Import ClientSecretCredential for authentication (alternative method)
 
-import os  # Import OS library to interact with environment variables
+import os       # Import OS library to interact with environment variables
 import logging  # Import logging library for capturing logs
-import socket  # Import socket library to retrieve hostname and IP information
-import json  # Import JSON library for handling JSON data
+import socket   # Import socket library to retrieve hostname and IP information
+import json     # Import JSON library for handling JSON data
 
 # Azure Cosmos DB Configuration
 COSMOS_ENDPOINT = os.environ.get("COSMOS_ENDPOINT", "")
 # Cosmos DB endpoint, retrieved from environment variables or defaults to a predefined URL
-DATABASE_NAME = os.environ.get("COSMOS_DATABASE_NAME", "CandidateDatabase")  # Name of the Cosmos DB database
-CONTAINER_NAME = os.environ.get("COSMOS_CONTAINER_NAME", "Candidates")  # Name of the Cosmos DB container
+DATABASE_NAME = os.environ.get("COSMOS_DATABASE_NAME", "CandidateDatabase")  
+# Name of the Cosmos DB database
+CONTAINER_NAME = os.environ.get("COSMOS_CONTAINER_NAME", "Candidates")  
+# Name of the Cosmos DB container
+AUTH_LEVEL = os.environ.get("AUTH_LEVEL", "ANONYMOUS").upper() 
+# What level of security to apply
 
 # Initialize Azure credentials for secure access to Azure resources
 credential = DefaultAzureCredential()
@@ -31,7 +35,9 @@ container = database.get_container_client(CONTAINER_NAME)
 hostname = os.popen('hostname -I').read().strip() 
 
 # Create an Azure FunctionApp instance with anonymous HTTP access level
-app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
+# Map the string value to the corresponding func.AuthLevel enum
+auth_level_enum = getattr(func.AuthLevel, AUTH_LEVEL, func.AuthLevel.ANONYMOUS)
+app = func.FunctionApp(http_auth_level=auth_level_enum)
 
 # Route to retrieve a candidate by name (GET method)
 @app.route(route="candidate/{name}", methods=["GET"])

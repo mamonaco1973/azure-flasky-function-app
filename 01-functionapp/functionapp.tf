@@ -88,6 +88,7 @@ resource "azurerm_linux_function_app" "flasky_function_app" {
     "COSMOS_ENDPOINT"                = azurerm_cosmosdb_account.candidate_account.endpoint
     "COSMOS_DATABASE_NAME"           = "CandidateDatabase"
     "COSMOS_CONTAINER_NAME"          = "Candidates"
+    "AUTH_LEVEL"                     = var.authorization_level
   }
 
   # Enforce HTTPS-only traffic for the Function App
