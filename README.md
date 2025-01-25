@@ -41,6 +41,7 @@ The combination of Azure Functions and Azure Function App allows developers to b
 * [Install AZ CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) 
 * [Install Latest Terraform](https://developer.hashicorp.com/terraform/install)
 * [Install Postman](https://www.postman.com/downloads/) for testing
+* Optionally [Install Azure Function Tools](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local) for local debugging
 
 If this is your first time watching our content, we recommend starting with this video: [Azure + Terraform: Easy Setup](https://youtu.be/wwi3kVgYNOk). It provides a step-by-step guide to properly configure Terraform, Packer, and the AZ CLI.
 
