@@ -1,7 +1,7 @@
 Write-Host "NOTE: Validating that required commands are found in your PATH."  -ForegroundColor Green
 
 # List of required commands
-$commands = @("az", "packer", "terraform")
+$commands = @("az", "terraform")
 $all_found = $true
 
 foreach ($cmd in $commands) {
